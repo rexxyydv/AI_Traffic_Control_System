@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>AI Traffic Control System</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&family=Rajdhani:wght@300;400;600;700&display=swap');
+
+  :root {
+    --red: #ff2233;
+    --amber: #ff9900;
+    --green: #00ff88;
+    --bg: #050a0f;
+    --panel: #0a1520;
+    --border: #1a3a5c;
+    --text: #c8e4f8;
+    --dim: #4a7a9b;
+    --scan: rgba(0,255,136,0.04);
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Rajdhani', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content:'';
+    position:fixed; inset:0;
+    background: repeating-linear-gradient(0deg,transparent,transparent 2px,var(--scan) 2px,var(--scan) 4px);
+    pointer-events:none; z-index:999;
+  }
+
+  /* ── HEADER ── */
+  header {
+    display:flex; align-items:center; justify-content:space-between;
+    padding:10px 24px;
+    border-bottom:1px solid var(--border);
+    background:linear-gradient(90deg,#050a0f,#0a1a2e,#050a0f);
+    position:sticky; top:0; z-index:100;
+  }
+  .logo { display:flex; align-items:center; gap:12px; }
+  .logo-icon {
+    width:36px; height:36px; background:var(--green);
+    clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);
+    display:flex; align-items:center; justify-content:center;
+    font-size:14px; color:#000; font-weight:900;
+    animation:pulse-logo 2s ease-in-out infinite;
+  }
+  @keyframes pulse-logo{0%,100%{box-shadow:0 0 0 0 rgba(0,255,136,0.4);}50%{box-shadow:0 0 0 8px rgba(0,255,136,0);}}
+  .logo-text h1{font-family:'Orbitron',monospace;font-size:14px;font-weight:900;letter-spacing:3px;color:var(--green);text-shadow:0 0 20px rgba(0,255,136,0.5);}
+  .logo-text p{font-size:9px;letter-spacing:4px;color:var(--dim);font-family:'Share Tech Mono',monospace;}
+
+  .header-stats{display:flex;gap:20px;}
+  .hstat{text-align:center;}
+  .hstat-val{font-family:'Orbitron',monospace;font-size:17px;font-weight:700;color:var(--green);}
+  .hstat-lbl{font-size:9px;letter-spacing:2px;color:var(--dim);font-family:'Share Tech Mono',monospace;}
+
+  .backend-status{
+    display:flex;align-items:center;gap:8px;
+    font-family:'Share Tech Mono',monospace;font-size:10px;
+    padding:5px 12px; border:1px solid var(--border); border-radius:4px;
+  }
+  .status-dot{width:8px;height:8px;border-radius:50%;background:var(--dim);transition:background 0.3s;}
+  .status-dot.online{background:var(--green);animation:blink 1.2s infinite;}
+  .status-dot.error{background:var(--red);}
+  @keyframes blink{0%,100%{opacity:1;}50%{opacity:0.3;}}
+
+  /* ── MAIN GRID ── */
+  .main {
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    grid-template-rows:1fr 1fr;
+    gap:2px; padding:2px;
+    height:calc(100vh - 120px);
+  }
+
+  /* ── LANE CARD ── */
+  .lane-card {
+    position:relative;
+    background:var(--panel);
+    border:1px solid var(--border);
+    overflow:hidden;
+    display:flex; flex-direction:column;
+    transition:border-color 0.3s, box-shadow 0.3s;
+  }
+  .lane-card.active {
+    border-color:var(--green);
+    box-shadow:inset 0 0 30px rgba(0,255,136,0.05),0 0 20px rgba(0,255,136,0.15);
+  }
+  .lane-card.active::after {
+    content:'● ACTIVE';
+    position:absolute; top:8px; right:10px;
+    background:var(--green); color:#000;
+    font-family:'Orbitron',monospace; font-size:7px; font-weight:900;
+    padding:2px 8px; letter-spacing:2px; z-index:15;
+    animation:active-pulse 0.6s ease-in-out infinite alternate;
+  }
+  @keyframes active-pulse{from{opacity:1;}to{opacity:0.5;}}
+
+  /* ── VIDEO AREA ── */
+  .video-wrap{position:relative;flex:1;background:#000;overflow:hidden;}
+  .video-wrap video{width:100%;height:100%;object-fit:cover;display:block;}
+
+  .bbox-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+  .video-placeholder {
+    width:100%; height:100%;
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:14px;
+    cursor:pointer;
+    background:radial-gradient(ellipse at center,#0d1e30 0%,#050a0f 100%);
+    transition:background 0.3s;
+  }
+  .video-placeholder:hover{background:radial-gradient(ellipse at center,#0d2a40 0%,#050a0f 100%);}
+  .upload-icon{
+    width:56px; height:56px;
+    border:2px dashed var(--border); border-radius:12px;
+    display:flex; align-items:center; justify-content:center; font-size:26px;
+    transition:border-color 0.3s,transform 0.3s;
+  }
+  .video-placeholder:hover .upload-icon{border-color:var(--green);transform:scale(1.05);}
+  .upload-text{text-align:center;font-size:11px;letter-spacing:2px;color:var(--dim);font-family:'Share Tech Mono',monospace;}
+  .upload-text span{display:block;margin-top:4px;font-size:9px;color:#2a4a6a;}
+
+  /* ── TRAFFIC LIGHT ── */
+  .traffic-light{
+    position:absolute; left:10px; top:50%; transform:translateY(-50%);
+    display:flex; flex-direction:column; gap:6px;
+    background:rgba(0,0,0,0.85); border:1px solid #1a3a5c;
+    border-radius:20px; padding:10px 8px; z-index:20;
+  }
+  .light{width:26px;height:26px;border-radius:50%;transition:all 0.3s;}
+  .light.red-l   {background:#3a0a0a;}
+  .light.amber-l {background:#3a2a00;}
+  .light.green-l {background:#003a15;}
+  .light.red-l.on   {background:var(--red);  box-shadow:0 0 12px var(--red),  0 0 24px rgba(255,34,51,0.4);}
+  .light.amber-l.on {background:var(--amber);box-shadow:0 0 12px var(--amber),0 0 24px rgba(255,153,0,0.4);}
+  .light.green-l.on {background:var(--green);box-shadow:0 0 12px var(--green),0 0 24px rgba(0,255,136,0.4);}
+
+  /* ── LANE LABEL ── */
+  .lane-label{
+    position:absolute; top:10px; left:10px;
+    font-family:'Orbitron',monospace; font-size:12px; font-weight:700;
+    color:#fff; text-shadow:0 0 10px rgba(0,255,136,0.8);
+    background:rgba(0,0,0,0.65); padding:3px 10px;
+    border-left:3px solid var(--green); z-index:10;
+  }
+
+  /* ── ANALYSIS BADGE ── */
+  .analysis-badge{
+    position:absolute; bottom:8px; right:8px;
+    background:rgba(0,0,0,0.75); border:1px solid var(--border);
+    font-family:'Share Tech Mono',monospace; font-size:9px;
+    color:var(--dim); padding:3px 8px; letter-spacing:1px; z-index:10;
+    transition:color 0.3s,border-color 0.3s;
+  }
+  .analysis-badge.detecting{color:var(--amber);border-color:var(--amber);animation:blink 0.8s infinite;}
+  .analysis-badge.done{color:var(--green);border-color:rgba(0,255,136,0.4);}
+
+  /* ── DENSITY OVERLAY ── */
+  .density-overlay{
+    position:absolute; bottom:0; left:0; right:0;
+    background:linear-gradient(transparent,rgba(0,0,0,0.88));
+    padding:10px 14px 6px;
+    font-family:'Share Tech Mono',monospace; font-size:10px;
+    color:#c8e4f8; letter-spacing:1px; z-index:10;
+  }
+
+  /* ── SCANNING LINE ── */
+  .scanning .scan-line{
+    position:absolute; left:0; right:0; height:2px;
+    background:linear-gradient(90deg,transparent,var(--green),transparent);
+    animation:scan-move 1.8s linear infinite;
+    pointer-events:none; z-index:5;
+  }
+  @keyframes scan-move{from{top:0;}to{top:100%;}}
+
+  /* ── BOTTOM BAR ── */
+  .lane-bottom{
+    padding:7px 12px;
+    background:rgba(0,0,0,0.6);
+    border-top:1px solid var(--border);
+    display:flex; align-items:center; gap:12px;
+    min-height:64px;
+  }
+
+  .timer-block{display:flex;flex-direction:column;align-items:center;gap:2px;min-width:62px;}
+  .timer-display{
+    font-family:'Orbitron',monospace; font-size:26px; font-weight:900;
+    letter-spacing:2px; transition:color 0.3s,text-shadow 0.3s;
+    color:var(--dim);
+  }
+  .timer-display.counting{color:var(--green);text-shadow:0 0 15px rgba(0,255,136,0.6);}
+  .timer-display.waiting {color:var(--red);  text-shadow:0 0 10px rgba(255,34,51,0.4);}
+  .timer-sub{font-family:'Share Tech Mono',monospace;font-size:8px;color:var(--dim);letter-spacing:1px;}
+
+  .density-bar-wrap{flex:1;}
+  .density-label{
+    display:flex; justify-content:space-between;
+    font-family:'Share Tech Mono',monospace; font-size:9px;
+    color:var(--dim); margin-bottom:3px; letter-spacing:1px;
+  }
+  .density-bar{height:6px;background:#0a1520;border-radius:3px;overflow:hidden;border:1px solid var(--border);}
+  .density-fill{height:100%;border-radius:3px;transition:width 0.6s ease,background 0.6s;}
+
+  /* vehicle type pills */
+  .vtype-row{display:flex;gap:5px;margin-top:5px;flex-wrap:wrap;}
+  .vpill{
+    font-family:'Share Tech Mono',monospace; font-size:8px;
+    padding:2px 6px; border-radius:2px;
+    background:rgba(0,255,136,0.08); border:1px solid rgba(0,255,136,0.2);
+    color:var(--green); letter-spacing:1px;
+  }
+  .vpill.zero{color:var(--dim);background:transparent;border-color:var(--border);}
+
+  /* ── CONTROL PANEL ── */
+  #control-panel{
+    padding:10px 24px;
+    background:rgba(5,10,15,0.97);
+    border-top:1px solid var(--border);
+    display:flex; align-items:center; justify-content:center; gap:16px;
+    flex-wrap:wrap;
+  }
+
+  .btn{
+    font-family:'Orbitron',monospace; font-size:9px; letter-spacing:2px;
+    padding:8px 18px; border:1px solid var(--border);
+    background:transparent; color:var(--dim); cursor:pointer;
+    transition:all 0.2s;
+    clip-path:polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%);
+  }
+  .btn:hover{border-color:var(--green);color:var(--green);background:rgba(0,255,136,0.05);}
+  .btn.primary{border-color:var(--green);color:#000;background:var(--green);font-weight:700;}
+  .btn.primary:hover{background:#00ffaa;box-shadow:0 0 20px rgba(0,255,136,0.4);}
+  .btn.danger{border-color:var(--red);color:var(--red);}
+  .btn.danger:hover{background:rgba(255,34,51,0.1);}
+  .btn:disabled{opacity:0.3;cursor:not-allowed;}
+
+  .ctrl-sep{width:1px;height:28px;background:var(--border);}
+
+  .cycle-indicator{display:flex;align-items:center;gap:8px;font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--dim);}
+  .cycle-dots{display:flex;gap:4px;}
+  .cycle-dot{width:8px;height:8px;border-radius:50%;background:var(--border);transition:background 0.3s;}
+  .cycle-dot.active{background:var(--green);box-shadow:0 0 8px var(--green);}
+
+  /* ── TOAST ── */
+  #toast{
+    position:fixed; bottom:80px; left:50%; transform:translateX(-50%);
+    background:#0a1a2e; border:1px solid var(--border);
+    font-family:'Share Tech Mono',monospace; font-size:11px; color:var(--text);
+    padding:8px 20px; letter-spacing:1px; z-index:500;
+    opacity:0; transition:opacity 0.3s; pointer-events:none;
+    white-space:nowrap;
+  }
+  #toast.show{opacity:1;}
+
+  input[type=file]{display:none;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <div class="logo-icon">AI</div>
+    <div class="logo-text">
+      <h1>ITMS NEXUS</h1>
+      <p>INTELLIGENT TRAFFIC MANAGEMENT SYSTEM · YOLO v8</p>
+    </div>
+  </div>
+  <div class="header-stats">
+    <div class="hstat"><div class="hstat-val" id="h-cycle">0</div><div class="hstat-lbl">CYCLES</div></div>
+    <div class="hstat"><div class="hstat-val" id="h-active">--</div><div class="hstat-lbl">ACTIVE LANE</div></div>
+    <div class="hstat"><div class="hstat-val" id="h-total">0</div><div class="hstat-lbl">TOTAL VEHICLES</div></div>
+  </div>
+  <div class="backend-status">
+    <div class="status-dot" id="sdot"></div>
+    <span id="sys-status">CONNECTING...</span>
+  </div>
+</header>
+
+<div class="main" id="main-grid"></div>
+
+<div id="control-panel">
+  <div class="cycle-indicator">
+    <span>CYCLE</span>
+    <div class="cycle-dots">
+      <div class="cycle-dot" id="cd0"></div>
+      <div class="cycle-dot" id="cd1"></div>
+      <div class="cycle-dot" id="cd2"></div>
+      <div class="cycle-dot" id="cd3"></div>
+    </div>
+  </div>
+  <div class="ctrl-sep"></div>
+  <button class="btn primary" id="btn-start" onclick="startSystem()" disabled>▶ START AI CONTROL</button>
+  <button class="btn danger"  id="btn-stop"  onclick="stopSystem()"  disabled>■ STOP</button>
+  <button class="btn" onclick="resetAll()">↺ RESET</button>
+  <div class="ctrl-sep"></div>
+  <span style="font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--dim)">
+    MIN: <b style="color:var(--text)">10s</b> &nbsp;|&nbsp; MAX: <b style="color:var(--text)">60s</b> &nbsp;|&nbsp; BACKEND: <b style="color:var(--text)">localhost:5050</b>
+  </span>
+</div>
+
+<div id="toast"></div>
+
+<!-- Hidden file inputs -->
+<input type="file" id="file0" accept="video/*" onchange="loadVideo(0,this)">
+<input type="file" id="file1" accept="video/*" onchange="loadVideo(1,this)">
+<input type="file" id="file2" accept="video/*" onchange="loadVideo(2,this)">
+<input type="file" id="file3" accept="video/*" onchange="loadVideo(3,this)">
+
+<script>
+const API = "http://localhost:5050";
+const MIN_GREEN = 10, MAX_GREEN = 60;
+
+// Lane layout:
+// [0] Lane 1 - top-left   | [1] Lane 2 - top-right
+// [2] Lane 3 - bottom-left | [3] Lane 4 - bottom-right
+// Clockwise order: Lane1 → Lane2 → Lane4 → Lane3 → repeat (indices: 0,1,3,2)
+const CLOCKWISE = [0, 1, 3, 2];
+
+const LANES = [
+  { id:0, label:'LANE 1', density:0, signal:'red', video:false, counts:{} },
+  { id:1, label:'LANE 2', density:0, signal:'red', video:false, counts:{} },
+  { id:2, label:'LANE 3', density:0, signal:'red', video:false, counts:{} },
+  { id:3, label:'LANE 4', density:0, signal:'red', video:false, counts:{} },
+];
+
+let running = false, activeLane = -1, cycleCount = 0;
+let backendOnline = false;
+let analyzedLanes = new Set();
+
+// ── UI BUILD ──────────────────────────────────────────────
+function buildUI() {
+  const grid = document.getElementById('main-grid');
+  grid.innerHTML = '';
+  LANES.forEach(lane => {
+    const card = document.createElement('div');
+    card.className = 'lane-card';
+    card.id = `card-${lane.id}`;
+    card.innerHTML = `
+      <div class="video-wrap" id="vwrap-${lane.id}">
+        <div class="scan-line" style="display:none" id="scanline-${lane.id}"></div>
+        <div class="video-placeholder" id="placeholder-${lane.id}" onclick="document.getElementById('file${lane.id}').click()">
+          <div class="upload-icon">📹</div>
+          <div class="upload-text">UPLOAD ${lane.label} VIDEO<span>click to browse · mp4 / webm / mov</span></div>
+        </div>
+        <video id="vid-${lane.id}" style="display:none" loop muted playsinline></video>
+          <canvas id="canvas-${lane.id}" class="bbox-canvas"></canvas>
+        <div class="traffic-light" id="tl-${lane.id}">
+          <div class="light red-l"   id="rl-${lane.id}"></div>
+          <div class="light amber-l" id="al-${lane.id}"></div>
+          <div class="light green-l" id="gl-${lane.id}"></div>
+        </div>
+        <div class="lane-label">${lane.label}</div>
+        <div class="analysis-badge" id="abadge-${lane.id}">NO VIDEO</div>
+        <div class="density-overlay" id="doverlay-${lane.id}">
+          Density: -- | Signal: RED
+        </div>
+      </div>
+      <div class="lane-bottom">
+        <div class="timer-block">
+          <div class="timer-display" id="tdisplay-${lane.id}">--</div>
+          <div class="timer-sub"    id="tsub-${lane.id}">AWAITING</div>
+        </div>
+        <div class="density-bar-wrap">
+          <div class="density-label">
+            <span>VEHICLE COUNT</span>
+            <span id="dcount-${lane.id}">0 vehicles</span>
+          </div>
+          <div class="density-bar">
+            <div class="density-fill" id="dbar-${lane.id}" style="width:0%;background:var(--dim)"></div>
+          </div>
+          <div class="vtype-row" id="vtypes-${lane.id}"></div>
+        </div>
+        <div style="text-align:center;min-width:44px;">
+          <div style="font-family:'Orbitron',monospace;font-size:12px;color:var(--amber)" id="alloc-${lane.id}">--s</div>
+          <div style="font-family:'Share Tech Mono',monospace;font-size:8px;color:var(--dim)">GREEN TIME</div>
+        </div>
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+  setSignal(-1, 'red');
+}
+
+// ── BACKEND HEALTH CHECK ──────────────────────────────────
+async function checkBackend() {
+  try {
+    const r = await fetch(`${API}/health`, { signal: AbortSignal.timeout(2000) });
+    if (r.ok) {
+      backendOnline = true;
+      document.getElementById('sdot').className = 'status-dot online';
+      document.getElementById('sys-status').textContent = 'YOLO BACKEND ONLINE';
+      document.getElementById('btn-start').disabled = false;
+      return true;
+    }
+  } catch {}
+  backendOnline = false;
+  document.getElementById('sdot').className = 'status-dot error';
+  document.getElementById('sys-status').textContent = 'BACKEND OFFLINE — run traffic_server.py';
+  document.getElementById('btn-start').disabled = true;
+  return false;
+}
+
+// ── VIDEO LOAD + YOLO ANALYSIS ────────────────────────────
+async function loadVideo(id, input) {
+  const file = input.files[0];
+  if (!file) return;
+
+  const url = URL.createObjectURL(file);
+  LANES[id].video = true;
+
+  const vid = document.getElementById(`vid-${id}`);
+  const ph  = document.getElementById(`placeholder-${id}`);
+  vid.src = url;
+  vid.style.display = 'block';
+  ph.style.display  = 'none';
+  vid.load();
+
+  // Show detecting state
+  const badge = document.getElementById(`abadge-${id}`);
+  badge.textContent = 'ANALYZING...';
+  badge.className = 'analysis-badge detecting';
+  toast(`Lane ${id+1}: sending to YOLO for analysis...`);
+
+  // Send video to backend for YOLO analysis
+  await analyzeVideoWithYOLO(id, file);
+}
+
+async function analyzeVideoWithYOLO(id, file) {
+  if (!backendOnline) {
+    toast('Backend offline! Start traffic_server.py first.');
+    // fallback to a neutral density
+    LANES[id].density = 10;
+    updateDensityUI(id);
+    return;
+  }
+
+  try {
+    const fd = new FormData();
+    fd.append('video', file);
+    fd.append('lane_id', id);
+
+    const r = await fetch(`${API}/analyze`, { method:'POST', body: fd });
+    const data = await r.json();
+
+    LANES[id].density = data.density;
+    LANES[id].counts  = data.counts || {};
+    analyzedLanes.add(id);
+
+    const badge = document.getElementById(`abadge-${id}`);
+    badge.textContent = `${data.density} vehicles · ${data.sample_frames} frames`;
+    badge.className = 'analysis-badge done';
+
+    updateDensityUI(id);
+    toast(`Lane ${id+1}: detected ${data.density} vehicles avg across ${data.sample_frames} frames`);
+
+  } catch (e) {
+    toast(`Lane ${id+1}: analysis failed — ${e.message}`);
+    const badge = document.getElementById(`abadge-${id}`);
+    badge.textContent = 'ANALYSIS FAILED';
+    badge.className = 'analysis-badge';
+    LANES[id].density = 10;
+    updateDensityUI(id);
+  }
+}
+
+// ── RE-ANALYSE A FRAME LIVE (called every N seconds during green) ──
+async function liveReanalyze(id) {
+  const vid = document.getElementById(`vid-${id}`);
+  if (!vid || !LANES[id].video || !backendOnline) return;
+
+  // Capture current frame via canvas
+  const canvas = document.createElement('canvas');
+  canvas.width  = vid.videoWidth  || 320;
+  canvas.height = vid.videoHeight || 240;
+  const ctx = canvas.getContext('2d');
+  ctx.drawImage(vid, 0, 0, canvas.width, canvas.height);
+  const b64 = canvas.toDataURL('image/jpeg', 0.7).split(',')[1];
+
+  try {
+    const r = await fetch(`${API}/analyze_frame`, {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ lane_id: id, frame: b64 }),
+      signal: AbortSignal.timeout(4000),
+    });
+    const data = await r.json();
+    LANES[id].density = data.density;
+    LANES[id].counts  = data.counts || {};
+
+    if (data.boxes) {
+    drawBoxes(id, data.boxes);
+    }
+    updateDensityUI(id);
+    } 
+    catch {}
+}
+
+// ── DENSITY UI ────────────────────────────────────────────
+const DENSITY_TO_TIME = d => Math.min(MAX_GREEN, Math.max(MIN_GREEN, Math.round(d * 2.5)));
+const MAX_D = 30;
+
+function updateDensityUI(id) {
+  const d   = LANES[id].density;
+  const pct = Math.min(100, Math.round((d / MAX_D) * 100));
+  const t   = DENSITY_TO_TIME(d);
+
+  document.getElementById(`dcount-${id}`).textContent = `${d} vehicles`;
+  document.getElementById(`alloc-${id}`).textContent  = `${t}s`;
+
+  const bar = document.getElementById(`dbar-${id}`);
+  bar.style.width      = pct + '%';
+  bar.style.background = pct > 70 ? '#ff2233' : pct > 40 ? '#ff9900' : '#00ff88';
+
+  document.getElementById(`doverlay-${id}`).textContent =
+    `Vehicles: ${d} | Signal: ${LANES[id].signal.toUpperCase()}`;
+
+  // Vehicle type pills
+  const row = document.getElementById(`vtypes-${id}`);
+  row.innerHTML = '';
+  const counts = LANES[id].counts || {};
+  ['Car','Truck','Bus','Motorcycle','Bicycle'].forEach(type => {
+    const n = counts[type] || 0;
+    const pill = document.createElement('div');
+    pill.className = 'vpill' + (n === 0 ? ' zero' : '');
+    pill.textContent = `${type}: ${Math.round(n)}`;
+    row.appendChild(pill);
+  });
+}
+
+// ── SIGNAL ────────────────────────────────────────────────
+function setSignal(id, state) {
+  const ids = id === -1 ? [0,1,2,3] : [id];
+  const s   = id === -1 ? 'red' : state;
+  ids.forEach(i => {
+    LANES[i].signal = s;
+    const rl = document.getElementById(`rl-${i}`);
+    const al = document.getElementById(`al-${i}`);
+    const gl = document.getElementById(`gl-${i}`);
+    if (!rl) return;
+    rl.className = 'light red-l';
+    al.className = 'light amber-l';
+    gl.className = 'light green-l';
+    if (s === 'red'   ) rl.classList.add('on');
+    if (s === 'amber' ) al.classList.add('on');
+    if (s === 'green' ) gl.classList.add('on');
+    if (s === 'red+amber') { rl.classList.add('on'); al.classList.add('on'); }
+    const ov = document.getElementById(`doverlay-${i}`);
+    if (ov) ov.textContent = `Vehicles: ${LANES[i].density} | Signal: ${s.toUpperCase()}`;
+  });
+}
+
+function setActiveCard(id) {
+  [0,1,2,3].forEach(i => {
+    document.getElementById(`card-${i}`)?.classList.toggle('active', i === id);
+    const sl = document.getElementById(`scanline-${i}`);
+    if (sl) sl.style.display = (i === id) ? 'block' : 'none';
+  });
+}
+
+function updateCycleDots(id) {
+  // Map lane id to clockwise position dot
+  const pos = CLOCKWISE.indexOf(id);
+  [0,1,2,3].forEach(i => document.getElementById(`cd${i}`)?.classList.toggle('active', i === pos));
+}
+
+// ── MAIN CYCLE ────────────────────────────────────────────
+async function startSystem() {
+  if (running) return;
+  if (!backendOnline) { toast('Backend offline — start traffic_server.py first'); return; }
+  running = true;
+  document.getElementById('btn-start').disabled = true;
+  document.getElementById('btn-stop').disabled  = false;
+  document.getElementById('sys-status').textContent = 'AI CONTROL ACTIVE';
+  runCycle();
+}
+
+async function runCycle() {
+  if (!running) return;
+  cycleCount++;
+  document.getElementById('h-cycle').textContent = cycleCount;
+
+  for (let qi = 0; qi < CLOCKWISE.length; qi++) {
+    if (!running) break;
+    const id = CLOCKWISE[qi];
+    activeLane = id;
+
+    const d = LANES[id].density;
+    const t = DENSITY_TO_TIME(d);
+
+    document.getElementById('h-active').textContent = `LANE ${id+1}`;
+    document.getElementById('h-total').textContent  = LANES.reduce((s,l)=>s+(l.density||0),0);
+
+    // All red + stop videos
+    [0,1,2,3].forEach(i => { setSignal(i,'red'); stopVideo(i); });
+    setActiveCard(id);
+    updateCycleDots(id);
+
+    await sleep(500);
+    if (!running) break;
+
+    // Go green
+    setSignal(id, 'green');
+    playVideo(id);
+
+    const td = document.getElementById(`tdisplay-${id}`);
+    const ts = document.getElementById(`tsub-${id}`);
+    td.className = 'timer-display counting';
+    ts.textContent = 'GREEN · GO';
+
+    [0,1,2,3].filter(i=>i!==id).forEach(i => {
+      document.getElementById(`tdisplay-${i}`).className = 'timer-display waiting';
+      document.getElementById(`tsub-${i}`).textContent   = 'WAITING';
+    });
+
+    // Live re-analyze every 8s during green phase
+    const reanalyzeTimer = setInterval(() => liveReanalyze(id), 8000);
+
+    await countdown(id, t);
+    clearInterval(reanalyzeTimer);
+    if (!running) break;
+
+    // Amber
+    setSignal(id, 'amber');
+    td.className   = 'timer-display waiting';
+    ts.textContent = 'AMBER';
+    await sleep(2000);
+    if (!running) break;
+
+    setSignal(id, 'red');
+    td.className   = 'timer-display';
+    td.textContent = '--';
+    ts.textContent = 'DONE';
+    stopVideo(id);
+  }
+
+  if (running) setTimeout(runCycle, 300);
+}
+
+function countdown(id, secs) {
+  return new Promise(resolve => {
+    let t = secs;
+    const td = document.getElementById(`tdisplay-${id}`);
+    td.textContent = t;
+    const itv = setInterval(() => {
+      if (!running) { clearInterval(itv); resolve(); return; }
+      t--;
+      td.textContent = t;
+      // Show wait time on other lanes
+      [0,1,2,3].filter(i=>i!==id).forEach(i => {
+        document.getElementById(`tdisplay-${i}`).textContent = t + 2;
+      });
+      if (t <= 0) { clearInterval(itv); resolve(); }
+    }, 1000);
+  });
+}
+
+function playVideo(id) {
+  const v = document.getElementById(`vid-${id}`);
+  if (v && LANES[id].video) v.play();
+}
+function stopVideo(id) {
+  const v = document.getElementById(`vid-${id}`);
+  if (v && LANES[id].video) v.pause();
+
+  // Clear bounding boxes
+  const canvas = document.getElementById(`canvas-${id}`);
+  if (canvas) {
+    const ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+  }
+}
+
+function stopSystem() {
+  running = false; activeLane = -1;
+  document.getElementById('btn-start').disabled = false;
+  document.getElementById('btn-stop').disabled  = true;
+  document.getElementById('sys-status').textContent = 'SYSTEM PAUSED';
+  [0,1,2,3].forEach(i => {
+    setSignal(i,'red'); stopVideo(i);
+    document.getElementById(`tdisplay-${i}`).className = 'timer-display';
+    document.getElementById(`tdisplay-${i}`).textContent = '--';
+    document.getElementById(`tsub-${i}`).textContent = 'STOPPED';
+  });
+  setActiveCard(-1);
+  [0,1,2,3].forEach(i => document.getElementById(`cd${i}`)?.classList.remove('active'));
+}
+
+function resetAll() {
+  stopSystem();
+  analyzedLanes.clear();
+  LANES.forEach((lane,i) => {
+    lane.density=0; lane.signal='red'; lane.video=false; lane.counts={};
+    const v = document.getElementById(`vid-${i}`);
+    if (v) { v.src=''; v.style.display='none'; }
+    document.getElementById(`placeholder-${i}`).style.display='flex';
+    document.getElementById(`dcount-${i}`).textContent='0 vehicles';
+    document.getElementById(`dbar-${i}`).style.width='0%';
+    document.getElementById(`alloc-${i}`).textContent='--s';
+    document.getElementById(`tdisplay-${i}`).textContent='--';
+    document.getElementById(`tsub-${i}`).textContent='AWAITING';
+    document.getElementById(`vtypes-${i}`).innerHTML='';
+    document.getElementById(`abadge-${i}`).textContent='NO VIDEO';
+    document.getElementById(`abadge-${i}`).className='analysis-badge';
+    document.getElementById(`doverlay-${i}`).textContent='Vehicles: -- | Signal: RED';
+  });
+  cycleCount=0;
+  document.getElementById('h-cycle').textContent='0';
+  document.getElementById('h-active').textContent='--';
+  document.getElementById('h-total').textContent='0';
+}
+
+// ── TOAST ─────────────────────────────────────────────────
+function toast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 3500);
+}
+
+function drawBoxes(id, boxes) {
+  const canvas = document.getElementById(`canvas-${id}`);
+  const video  = document.getElementById(`vid-${id}`);
+  if (!canvas || !video) return;
+
+  const ctx = canvas.getContext('2d');
+
+  canvas.width  = video.videoWidth;
+  canvas.height = video.videoHeight;
+
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  ctx.lineWidth = 2;
+  ctx.font = "12px monospace";
+
+  boxes.forEach(box => {
+    const { x1, y1, x2, y2, label, conf } = box;
+
+    ctx.strokeStyle = "#00ff88";
+    ctx.strokeRect(x1, y1, x2 - x1, y2 - y1);
+
+    ctx.fillStyle = "#00ff88";
+    ctx.fillText(`${label} ${conf}`, x1, y1 - 5);
+  });
+}
+
+// ── INIT ──────────────────────────────────────────────────
+buildUI();
+setSignal(-1,'red');
+checkBackend();
+setInterval(checkBackend, 5000); // keep polling backend status
+</script>
+</body>
+</html>
