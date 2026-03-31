@@ -19,7 +19,7 @@ print("Model ready!\n")
 # ── TUNING ────────────────────────────────────────────────────────────────────
 CONFIDENCE = 0.15
 IOU        = 0.40
-IMGSZ      = 320   # lower than before for faster per-frame inference (live tracking)
+IMGSZ      = 320   
 NUM_FRAMES = 15
 
 VEHICLE_CLASSES = {
