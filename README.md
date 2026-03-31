@@ -42,7 +42,7 @@ TrafficControl/
 
 1. Clone repository
 
-git clone https://github.com/patataguyy/TrafficControl.git
+git clone https://github.com/rexxyydv/TrafficControl.git
 cd TrafficControl
 
 2. Install dependencies
