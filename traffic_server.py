@@ -11,14 +11,16 @@ import tempfile
 app = Flask(__name__)
 CORS(app)
 
+# ── MODEL ─────────────────────────────────────────────────────────────────────
 print("Loading YOLOv8m model (~52MB — downloads on first run)...")
 model = YOLO("yolov8m.pt")
 print("Model ready!\n")
 
+# ── TUNING ────────────────────────────────────────────────────────────────────
 CONFIDENCE = 0.15
 IOU        = 0.40
-IMGSZ      = 1280
-NUM_FRAMES = 15    
+IMGSZ      = 320   # lower than before for faster per-frame inference (live tracking)
+NUM_FRAMES = 15
 
 VEHICLE_CLASSES = {
     2: "Car",
@@ -32,7 +34,6 @@ lock = threading.Lock()
 
 
 def preprocess_frame(frame):
-    """CLAHE contrast enhancement + sharpening for washed-out CCTV footage."""
     lab = cv2.cvtColor(frame, cv2.COLOR_BGR2LAB)
     l, a, b = cv2.split(lab)
     clahe = cv2.createCLAHE(clipLimit=2.5, tileGridSize=(8, 8))
@@ -58,7 +59,8 @@ def detect_vehicles_in_frame(frame_bgr):
             conf = float(box.conf[0])
             x1, y1, x2, y2 = box.xyxy[0].tolist()
             boxes_out.append({
-                "label": label, "conf": round(conf, 2),
+                "label": label,
+                "conf":  round(conf, 2),
                 "x1": round(x1), "y1": round(y1),
                 "x2": round(x2), "y2": round(y2),
             })
@@ -93,7 +95,7 @@ def analyze():
     if "video" not in request.files:
         return jsonify({"error": "No video file provided"}), 400
 
-    lane_id = int(request.form.get("lane_id", 0))
+    lane_id    = int(request.form.get("lane_id", 0))
     video_file = request.files["video"]
 
     suffix = os.path.splitext(video_file.filename)[-1] or ".mp4"
@@ -120,14 +122,13 @@ def analyze():
         median_density = all_totals[len(all_totals) // 2]
         avg_counts = {k: round(v / len(frames), 1) for k, v in all_counts.items()}
 
-        print(f"Lane {lane_id+1}: {median_density} vehicles (median) | {avg_counts}")
+        print(f"Lane {lane_id+1}: {median_density} vehicles | {avg_counts}")
 
         return jsonify({
-            "lane_id": lane_id,
-            "density": median_density,
-            "counts": avg_counts,
+            "lane_id":       lane_id,
+            "density":       median_density,
+            "counts":        avg_counts,
             "sample_frames": len(frames),
-            "all_counts": all_totals,
         })
     finally:
         os.unlink(tmp_path)
@@ -135,31 +136,38 @@ def analyze():
 
 @app.route("/analyze_frame", methods=["POST"])
 def analyze_frame():
+    """
+    Fast single-frame inference — called continuously for live box tracking.
+    Accepts base64 JPEG, returns boxes + counts immediately.
+    """
     data = request.get_json()
     if not data or "frame" not in data:
         return jsonify({"error": "No frame data"}), 400
 
-    lane_id = int(data.get("lane_id", 0))
+    lane_id   = int(data.get("lane_id", 0))
     img_bytes = base64.b64decode(data["frame"])
-    nparr = np.frombuffer(img_bytes, np.uint8)
-    frame = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+    nparr     = np.frombuffer(img_bytes, np.uint8)
+    frame     = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
 
     if frame is None:
         return jsonify({"error": "Invalid image data"}), 400
 
     total, counts, boxes = detect_vehicles_in_frame(frame)
-    print(f"Live Lane {lane_id+1}: {total} vehicles")
 
-    return jsonify({"lane_id": lane_id, "density": total, "counts": counts, "boxes": boxes})
+    return jsonify({
+        "lane_id": lane_id,
+        "density": total,
+        "counts":  counts,
+        "boxes":   boxes,
+    })
 
 
 if __name__ == "__main__":
     print("\n" + "=" * 52)
-    print("  AI Traffic Control - YOLO Backend  v2")
-    print("  Model      : YOLOv8m (medium)")
-    print("  Confidence : 0.15  (tuned for overhead CCTV)")
-    print("  Image size : 1280px")
-    print("  Frames     : 15 per video (median count)")
+    print("  AI Traffic Control - YOLO Backend  v3")
+    print("  Model      : YOLOv8m")
+    print("  Confidence : 0.15  (overhead CCTV)")
+    print("  Live track : imgsz=320 for fast inference")
     print("  Running at : http://localhost:5050")
     print("=" * 52 + "\n")
     app.run(host="0.0.0.0", port=5050, debug=False, threaded=True)
