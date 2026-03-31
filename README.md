@@ -42,7 +42,7 @@ TrafficControl/
 
 1. Clone repository
 
-git clone https://github.com/rexxyydv/TrafficControl.git
+git clone https://github.com/rexxyydv/AI_Traffic_Control_System.git
 cd TrafficControl
 
 2. Install dependencies
