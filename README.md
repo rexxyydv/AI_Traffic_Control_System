@@ -32,8 +32,11 @@ An AI-powered traffic analysis backend that detects and counts vehicles using YO
 
 TrafficControl/
 │── traffic_server.py
+│── traffic_dashboard.html
 │── requirements.txt
 │── README.md
+│── START_COMMAND.command
+│── yolov8m.pt
 
 🚀 Installation
 
