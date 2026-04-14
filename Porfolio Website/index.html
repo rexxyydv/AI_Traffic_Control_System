@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aether Fox Studio | Web Design & Development</title>
+    <meta name="description" content="Aether Fox Studio crafts fast, conversion-focused websites for Flathead Valley businesses. Design, development, and consulting.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <div class="app-root">
+        <!-- Header -->
+        <header class="header">
+            <div class="container header-container">
+                <a href="#" class="logo-link">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 938 1200" fill="none"><path fill="#fff" d="M378.601 20.668C391.746-1.578 415.915-7.32 428.115 10.62c18.179 34.922 61.139 122.277 87.547 192.314.956 4.306 5.883 13.061 17.939 13.635 15.07.717 116.25 20.092 177.963 103.333 61.713 83.24 29.421 74.629 154.281 137.059 11.003 4.306 30.713 18.945 21.528 43.056-11.481 30.139-38.032 74.63-151.411 74.63S514.226 553.12 406.587 648.56C298.949 744 288.185 962.147 394.388 1066.2c106.204 104.05 234.652 77.5 322.916 40.9 88.264-36.6 172.222-127.73 203.078-180.832 1.914-3.588 7.32-10.333 13.635-8.611 2.153.718 5.597 5.023 2.152 16.505-4.305 14.352-30.856 100.458-109.073 162.178-51.922 40.96-160.023 113.2-332.245 102.61-81.469-5.01-240.266-35.4-360.231-162.89-194.468-206.667-153.232-466.393-33.727-630.046C213.555 251.732 287.01 175.667 378.601 20.668Zm25.115 61.711c-26.072 40.186-88.407 133.904-129.166 187.292-50.949 66.736-94.005 105.487-152.13 201.644-58.124 96.157-107.638 243.981-27.268 416.203C159.448 1025.3 305.646 1099.45 370.707 1119.3c-44.49-42.34-104.05-119.12-104.05-251.875 0-132.754 53.818-216.713 124.86-279.143 71.042-62.431 215.278-83.24 307.13-70.323 73.481 10.333 112.422-8.612 122.708-19.375-143.518-74.63-104.051-92.57-160.74-152.848-56.69-60.278-121.274-72.477-144.954-76.065-23.681-3.588-36.598-7.893-45.926-33.008-7.463-20.093-47.122-111.228-66.019-154.284Z"></path><path fill="#fff" d="M662.452 659.429c2.537-8.017 13.881-8.017 16.419 0l41.68 131.686a8.612 8.612 0 0 0 5.611 5.611l131.686 41.68c8.017 2.537 8.017 13.882 0 16.419l-131.686 41.68a8.612 8.612 0 0 0-5.611 5.611l-41.68 131.684c-2.537 8.02-13.882 8.02-16.419 0l-41.68-131.684a8.613 8.613 0 0 0-5.612-5.611l-131.685-41.68c-8.017-2.537-8.017-13.882 0-16.419l131.685-41.68a8.613 8.613 0 0 0 5.612-5.611l41.68-131.686Z"></path></svg>
+                    <span>Aether Fox Studio</span>
+                </a>
+                <div class="header-actions">
+                    <a href="#" class="btn btn-primary" id="headerCTA">
+                        <svg viewBox="0 0 16 16" width="20" height="20"><path fill="currentColor" d="M8.364 5.346a1.62 1.62 0 0 1 2.293.004c.632.632.637 1.659.004 2.293a1.62 1.62 0 0 1-2.293-.004 1.62 1.62 0 0 1-.004-2.293m1.585.71a.62.62 0 0 0-.878-.003.62.62 0 0 0 .004.878.62.62 0 0 0 .878.004.62.62 0 0 0-.004-.878M13.778 3.5a1.95 1.95 0 0 0-1.272-1.272A4.84 4.84 0 0 0 7.63 3.422l-.629.63a2.38 2.38 0 0 0-2.62.502l-.786.785a.5.5 0 0 0 0 .708l.85.85a1.5 1.5 0 0 0 .39 1.441l.167.167-.773.462a.5.5 0 0 0-.097.783l2.123 2.123a.5.5 0 0 0 .783-.097l.462-.772.167.166c.39.391.943.521 1.442.39l.85.85a.5.5 0 0 0 .707 0l.785-.785a2.38 2.38 0 0 0 .503-2.62l.629-.63A4.84 4.84 0 0 0 13.778 3.5m-1.572-.318a.95.95 0 0 1 .618.619 3.84 3.84 0 0 1-.947 3.867l-2.795 2.795a.5.5 0 0 1-.707 0L5.543 7.631a.5.5 0 0 1 0-.707L8.338 4.13a3.84 3.84 0 0 1 3.868-.947m-1.064 6.635c.037.393-.095.8-.397 1.101l-.432.432-.352-.352zM5.088 5.261a1.37 1.37 0 0 1 1.101-.397l-1.18 1.18-.353-.351zm1.684 5.014-.262.437-1.216-1.216.438-.262zm-1.923 1.59a.5.5 0 1 0-.707-.708l-1.32 1.32a.5.5 0 1 0 .707.708zm-1.062-1.769a.5.5 0 0 1 0 .707l-.53.53a.5.5 0 1 1-.706-.708l.53-.529a.5.5 0 0 1 .706 0m2.123 2.83a.5.5 0 1 0-.707-.707l-.53.53a.5.5 0 1 0 .708.707z"></path></svg>
+                        <span style="color: #0c0c0c;">Book a Free Consult</span>
+                    </a>
+                    <button class="btn btn-icon" aria-label="Toggle Menu">
+                        <svg viewBox="0 0 20 20" width="24" height="24"><path fill="currentColor" d="M6 4.5a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5m1 10a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1h-10a.5.5 0 0 1-.5-.5M2.5 9a.5.5 0 0 0 0 1h15a.5.5 0 0 0 0-1z"></path></svg>
+                    </button>
+                    <div class="corner-dot cd-bl"></div><div class="corner-dot cd-br"></div>
+                </div>
+            </div>
+        </header>
+
+        <main>
+            <!-- Hero Section -->
+            <section class="hero section-border fade-up element-visible" id="home">
+                <div class="container hero-container pb-0">
+                    <div class="hero-content">
+                        <p class="hero-subtitle">Navigate the Digital Aether with Confidence.</p>
+                        <h1 class="hero-title">Charting Montana's<br>Digital Future.</h1>
+                        <div class="hero-buttons">
+                            <a href="#" class="btn btn-primary" id="primaryCTA">
+                                <svg style="color: #0c0c0c;" viewBox="0 0 16 16" width="20" height="20"><path fill="currentColor" d="M8.364 5.346a1.62 1.62 0 0 1 2.293.004c.632.632.637 1.659.004 2.293a1.62 1.62 0 0 1-2.293-.004 1.62 1.62 0 0 1-.004-2.293m1.585.71a.62.62 0 0 0-.878-.003.62.62 0 0 0 .004.878.62.62 0 0 0 .878.004.62.62 0 0 0-.004-.878M13.778 3.5a1.95 1.95 0 0 0-1.272-1.272A4.84 4.84 0 0 0 7.63 3.422l-.629.63a2.38 2.38 0 0 0-2.62.502l-.786.785a.5.5 0 0 0 0 .708l.85.85a1.5 1.5 0 0 0 .39 1.441l.167.167-.773.462a.5.5 0 0 0-.097.783l2.123 2.123a.5.5 0 0 0 .783-.097l.462-.772.167.166c.39.391.943.521 1.442.39l.85.85a.5.5 0 0 0 .707 0l.785-.785a2.38 2.38 0 0 0 .503-2.62l.629-.63A4.84 4.84 0 0 0 13.778 3.5m-1.572-.318a.95.95 0 0 1 .618.619 3.84 3.84 0 0 1-.947 3.867l-2.795 2.795a.5.5 0 0 1-.707 0L5.543 7.631a.5.5 0 0 1 0-.707L8.338 4.13a3.84 3.84 0 0 1 3.868-.947m-1.064 6.635c.037.393-.095.8-.397 1.101l-.432.432-.352-.352zM5.088 5.261a1.37 1.37 0 0 1 1.101-.397l-1.18 1.18-.353-.351zm1.684 5.014-.262.437-1.216-1.216.438-.262zm-1.923 1.59a.5.5 0 1 0-.707-.708l-1.32 1.32a.5.5 0 1 0 .707.708zm-1.062-1.769a.5.5 0 0 1 0 .707l-.53.53a.5.5 0 1 1-.706-.708l.53-.529a.5.5 0 0 1 .706 0m2.123 2.83a.5.5 0 1 0-.707-.707l-.53.53a.5.5 0 1 0 .708.707z"></path></svg>
+                                <span style="color: #0c0c0c;">Book a Free Consult</span>
+                            </a>
+                            <a href="#testimonials" class="btn btn-secondary">
+                                <svg viewBox="0 0 16 16" width="20" height="20"><path fill="currentColor" d="M4.5 4a.5.5 0 0 0 0 1h3a.5.5 0 0 0 0-1zM4 6.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5M4.5 8a.5.5 0 0 0 0 1h3a.5.5 0 0 0 0-1zm-3-3.5A2.5 2.5 0 0 1 4 2h6.5A2.5 2.5 0 0 1 13 4.5v5a2.5 2.5 0 0 1-2.5 2.5H4a2.5 2.5 0 0 1-2.5-2.5zM4 3a1.5 1.5 0 0 0-1.5 1.5v5A1.5 1.5 0 0 0 4 11h6.5A1.5 1.5 0 0 0 12 9.5v-5A1.5 1.5 0 0 0 10.5 3zm10 6.5a3.5 3.5 0 0 1-3.5 3.5H3.671c.773.626 1.757 1 2.829 1h4A4.5 4.5 0 0 0 15 9.5v-3a4.48 4.48 0 0 0-1-2.829z"></path></svg>
+                                <span>Read Testimonials</span>
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <!-- Interactive Mountains SVG -->
+                    <div class="hero-mountains absolute inset-x-0 bottom-0 pointer-events-none opacity-40 z-0" style="height: 40%;">
+                        <svg viewBox="0 0 1000 300" preserveAspectRatio="none" style="width: 100%; height: 100%; position: absolute; bottom: 0;">
+                            <path d="M0,300 L0,200 L150,100 L300,180 L500,50 L750,220 L1000,100 L1000,300 Z" fill="rgba(150,150,150,0.15)" stroke="rgba(255,255,255,0.05)" stroke-width="1"></path>
+                            <path d="M0,300 L0,250 L200,150 L400,220 L650,80 L850,200 L1000,150 L1000,300 Z" fill="rgba(80,80,80,0.2)" stroke="rgba(255,255,255,0.1)" stroke-width="1"></path>
+                            <path d="M0,300 L0,280 L250,200 L450,250 L700,150 L900,230 L1000,180 L1000,300 Z" fill="rgba(30,30,30,0.4)" stroke="rgba(255,255,255,0.15)" stroke-width="1"></path>
+                        </svg>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Services -->
+            <section id="services" class="section-border fade-up">
+                <div class="container">
+                    <div class="corner-dot cd-tl hidden-mobile"></div>
+                    <div class="corner-dot cd-tr hidden-mobile"></div>
+                    
+                    <div class="section-header p-block">
+                        <h2>Our Services</h2>
+                        <p class="accent-color section-sub font-mono">From strategy to launch—cohesive, fast, future-proof.</p>
+                    </div>
+
+                    <div class="bento-grid">
+                        <div class="corner-dot cd-bl hidden-mobile"></div>
+                        <div class="corner-dot cd-br hidden-mobile"></div>
+                        
+                        <div class="bento-card bento-large">
+                            <div class="corner-dot cd-tl hidden-mobile"></div>
+                            <div class="bento-bg"></div>
+                            <div class="bento-content">
+                                <div class="bento-title-row">
+                                    <svg viewBox="0 0 20 20" width="32" height="32"><path fill="currentColor" d="M6 3a3 3 0 0 0-3 3v8a3 3 0 0 0 3 3h1.085a1.5 1.5 0 0 1 0-1H6a2 2 0 0 1-2-2V7h12v2.268A2 2 0 0 1 17 9V6a3 3 0 0 0-3-3zM4 6a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2zm13.707 5.707a1 1 0 0 0-1.414-1.414l-2.88 2.88a2.5 2.5 0 0 0-2.68.56c-.267.266-.42.534-.536.775l-.108.235c-.059.13-.106.234-.177.35-.168.275-.478.61-1.554.928a.5.5 0 0 0-.252.788c1.618 2.063 4.523 2.122 6.163.457a2.5 2.5 0 0 0 .559-2.68zM11.44 14.44a1.5 1.5 0 0 1 2.121 2.122l-.002.002c-1.066 1.083-2.888 1.204-4.16.148.718-.31 1.107-.672 1.366-1.094a5 5 0 0 0 .266-.526l.069-.15c.089-.185.183-.345.34-.502"></path></svg>
+                                    <h3>Design Systems & UI</h3>
+                                </div>
+                                <p>Visual systems that scale seamlessly—from your first component to your hundredth page.</p>
+                            </div>
+                        </div>
+
+                        <div class="bento-card">
+                            <div class="corner-dot cd-tl hidden-mobile"></div>
+                            <div class="bento-bg"></div>
+                            <div class="bento-content">
+                                <div class="bento-title-row">
+                                    <svg viewBox="0 0 20 20" width="32" height="32"><path fill="currentColor" d="M2.5 5a.5.5 0 0 0 0 1H8a.5.5 0 0 0 0-1zm3 3a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1zM4 11.5a.5.5 0 0 1 .5-.5h9.444l-1 1H4.5a.5.5 0 0 1-.5-.5m6.274 3.17.67-.67H2.5a.5.5 0 0 0 0 1h7.486q.132-.174.288-.33M12.5 8.5A.5.5 0 0 1 13 8h3.5a.5.5 0 0 1 0 1H13a.5.5 0 0 1-.5-.5m-2-3.5a.5.5 0 0 0 0 1H17a.5.5 0 0 0 0-1zm.48 10.377 4.83-4.83a1.87 1.87 0 1 1 2.644 2.646l-4.83 4.829a2.2 2.2 0 0 1-1.02.578l-1.498.374a.89.89 0 0 1-1.079-1.078l.375-1.498a2.2 2.2 0 0 1 .578-1.02"></path></svg>
+                                    <h3>Web Dev & Performance</h3>
+                                </div>
+                                <p>Lightning-fast, accessible sites that rank well and convert better.</p>
+                            </div>
+                        </div>
+
+                        <div class="bento-card">
+                            <div class="corner-dot cd-tl hidden-mobile"></div>
+                            <div class="corner-dot cd-tr hidden-mobile"></div>
+                            <div class="bento-bg"></div>
+                            <div class="bento-content">
+                                <div class="bento-title-row">
+                                    <svg viewBox="0 0 20 20" width="32" height="32"><path fill="currentColor" d="M9.5 6.502a.5.5 0 0 1 1 0v1.002a.5.5 0 0 1-1 0zm3.35.941a.5.5 0 0 0-.707 0l-.708.709a.5.5 0 0 0 .707.707l.709-.709a.5.5 0 0 0 0-.707m-4.998 0a.5.5 0 1 0-.707.707l.708.709a.5.5 0 1 0 .707-.707zM10 2c3.314 0 6 2.597 6 5.8 0 1.677-.745 3.216-2.204 4.594a.6.6 0 0 0-.145.213l-.026.081-.936 3.917c-.184.771-.865 1.33-1.67 1.39l-.144.005h-1.75c-.818 0-1.535-.516-1.776-1.262l-.038-.133-.935-3.916a.6.6 0 0 0-.17-.295c-1.39-1.312-2.133-2.77-2.2-4.355L4 7.8l.003-.191C4.108 4.494 6.753 2 10 2M7.955 15l.319 1.334.026.096c.097.3.376.522.712.563l.113.007h1.713l.106-.003a.86.86 0 0 0 .741-.525l.031-.1.329-1.372zM10 3C7.368 3 5.212 4.953 5.015 7.414l-.012.212L5 7.779l.004.217c.056 1.304.674 2.525 1.888 3.671.188.178.33.398.414.64l.043.15L7.716 14H9.5V9.497a.5.5 0 1 1 1 0V14h1.785l.387-1.615.051-.15c.086-.215.218-.409.386-.568C14.383 10.465 15 9.181 15 7.8 15 5.157 12.769 3 10 3"></path></svg>
+                                    <h3>Strategy & Consulting</h3>
+                                </div>
+                                <p>Cut through the noise with positioning, IA, and content that reaches your ideal audience.</p>
+                            </div>
+                        </div>
+
+                        <div class="bento-card bento-wide border-t-only">
+                            <div class="corner-dot cd-tl hidden-mobile"></div>
+                            <div class="corner-dot cd-br hidden-mobile"></div>
+                            <div class="bento-bg"></div>
+                            <div class="bento-content">
+                                <div class="bento-title-row">
+                                    <svg viewBox="0 0 20 20" width="32" height="32"><path fill="currentColor" d="M17.854 2.146a.5.5 0 0 1 0 .708l-1.668 1.668a4.04 4.04 0 0 1-.332 5.331l-.3.3-.003.003-.309.309a1.05 1.05 0 0 1-1.484 0L9.535 6.242a1.05 1.05 0 0 1 0-1.485l.611-.61a4.036 4.036 0 0 1 5.332-.332l1.668-1.669a.5.5 0 0 1 .708 0M15.14 4.847a3.037 3.037 0 0 0-4.286.006l-.3.3a.49.49 0 0 0 0 .693l3.6 3.6c.19.191.5.192.691.002l.002-.002.3-.3a3.036 3.036 0 0 0 .006-4.286l-.007-.006zm-5.786 3.8a.5.5 0 0 1 0 .707L7.707 11 9 12.293l1.646-1.647a.5.5 0 0 1 .708.708L9.707 13l.447.447a1.49 1.49 0 0 1 0 2.107l-.3.3a4.036 4.036 0 0 1-5.332.332l-1.668 1.668a.5.5 0 0 1-.708-.708l1.669-1.668a4.036 4.036 0 0 1 .331-5.331l.3-.3a1.49 1.49 0 0 1 2.108 0l.446.446 1.646-1.647a.5.5 0 0 1 .708 0m-4.495 6.505a3.036 3.036 0 0 0 4.287-.005l.3-.3a.49.49 0 0 0 0-.693l-3.6-3.6a.49.49 0 0 0-.692 0l-.3.3a3.036 3.036 0 0 0 0 4.292z"></path></svg>
+                                    <h3>Integrations & Tooling</h3>
+                                </div>
+                                <p>CMS, e-commerce, APIs, and automation. We stitch systems so they feel like one.</p>
+                            </div>
+                        </div>
+
+                        <div class="bento-card bento-wide border-t-only border-l-0">
+                            <div class="corner-dot cd-tl hidden-mobile"></div>
+                            <div class="corner-dot cd-tr hidden-mobile"></div>
+                            <div class="bento-bg"></div>
+                            <div class="bento-content">
+                                <div class="bento-title-row">
+                                    <svg viewBox="0 0 20 20" width="32" height="32"><path fill="currentColor" d="M16.518 9c.261 0 .48-.201.482-.463V8.5A6.5 6.5 0 0 0 10.5 2h-.037a.473.473 0 0 0-.463.482V8.5a.5.5 0 0 0 .5.5zM11 3.022A5.5 5.5 0 0 1 15.978 8H11zM8 9V5.1A5 5 0 0 0 9 15v1a6 6 0 0 1-.5-11.98.47.47 0 0 1 .5.48V9a1 1 0 0 0 1 1h4.5a.47.47 0 0 1 .48.5 6 6 0 0 1-.063.5H14l-.1.002V11H10a2 2 0 0 1-2-2m9 1a1 1 0 0 0-1 1v7a1 1 0 1 0 2 0v-7a1 1 0 0 0-1-1m-3 2a1 1 0 0 0-1 1v5a1 1 0 1 0 2 0v-5a1 1 0 0 0-1-1m-4 3a1 1 0 1 1 2 0v3a1 1 0 1 1-2 0z"></path></svg>
+                                    <h3>Audits & Growth</h3>
+                                </div>
+                                <p>Site health, SEO, and analytics that turn data into decisions.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Blog -->
+            <section class="section-border fade-up pb-10">
+                <div class="container section-container">
+                    <div class="corner-dot cd-tr hidden-mobile"></div>
+                    <div class="corner-dot cd-tl hidden-mobile"></div>
+                    
+                    <div class="section-header p-block border-b-line">
+                        <h2>From the Blog</h2>
+                        <p class="accent-color section-sub font-mono">Insights, stories, and updates from the studio.</p>
+                    </div>
+
+                    <div class="blog-grid-header">
+                        <span class="blog-label font-mono">Posts</span>
+                    </div>
+
+                    <ul class="blog-list">
+                        <li>
+                            <a href="#" class="blog-item">
+                                <div class="corner-dot cd-bl hidden-mobile"></div>
+                                <div class="corner-dot cd-br hidden-mobile"></div>
+                                <div class="blog-bg"></div>
+                                
+                                <div class="blog-img" style="background-image: url('https://picsum.photos/400/200'); background-size: cover; background-position: center;"></div>
+                                <div class="blog-content">
+                                    <h3 class="font-heading">Renovating Trusted Gear Co. for Growth</h3>
+                                    <p>Reimagining the online experience for Trusted Gear Co: A comprehensive brand refresh and Shopify rebuild for the Flathead Valley’s premier workwear importer.</p>
+                                </div>
+                                <div class="blog-tags">
+                                    <span class="tag">project</span>
+                                    <span class="tag">web development</span>
+                                    <span class="tag">shopify</span>
+                                </div>
+                                <div class="blog-date">
+                                    <span>Jan 25, 2026</span>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="blog-item">
+                                <div class="corner-dot cd-bl hidden-mobile"></div>
+                                <div class="corner-dot cd-br hidden-mobile"></div>
+                                <div class="blog-bg"></div>
+                                
+                                <div class="blog-img" style="background-color: #262626;"></div>
+                                <div class="blog-content">
+                                    <h3 class="font-heading accent-color">Meet Aether Fox Studio: Digital Craftsmanship in the Rockies</h3>
+                                    <p>Introducing Aether Fox Studio: A new digital creative agency focused on bridging the gap between the world-class craftsmanship of the Flathead Valley and the digital presence local businesses deserve.</p>
+                                </div>
+                                <div class="blog-tags">
+                                    <span class="tag">announcement</span>
+                                </div>
+                                <div class="blog-date">
+                                    <span>Dec 5, 2025</span>
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Testimonials -->
+            <section id="testimonials" class="section-border fade-up">
+                <div class="container section-container">
+                    <div class="section-header border-b-line p-block">
+                        <h2>Testimonials</h2>
+                        <p class="accent-color section-sub font-mono">Results speak louder than code.</p>
+                    </div>
+
+                    <div class="testimonial-grid">
+                        <div class="corner-dot cd-bl hidden-mobile"></div>
+                        <div class="corner-dot cd-br hidden-mobile"></div>
+                        
+                        <div class="testimonial-card border-r-line">
+                            <div class="corner-dot cd-tr hidden-mobile" style="top: -4px; right: -4px;"></div>
+                            <div class="corner-dot cd-bl hidden-mobile" style="bottom: -4px; left: -4px;"></div>
+                            <div class="testimonial-bg"></div>
+                            
+                            <div class="testimonial-header">
+                                <div class="testimonial-avatar" style="background-image: url('https://picsum.photos/40/40'); background-size: cover;"></div>
+                                <div class="testimonial-author">
+                                    <h4>Austin Ragno</h4>
+                                    <p>Creative Director, Flag Nor Fail</p>
+                                </div>
+                            </div>
+                            <p class="testimonial-quote">Working with Josh was incredible. From site management to thorough problem solving, <span class="text-white">he's a great asset for any team or project</span>.</p>
+                        </div>
+
+                        <div class="testimonial-card">
+                            <div class="corner-dot cd-tr hidden-mobile" style="top: -4px; right: -4px;"></div>
+                            <div class="corner-dot cd-bl hidden-mobile" style="bottom: -4px; left: -4px;"></div>
+                            <div class="testimonial-bg"></div>
+                            
+                            <div class="testimonial-header">
+                                <div class="testimonial-avatar" style="background-image: url('https://picsum.photos/50/50'); background-size: cover;"></div>
+                                <div class="testimonial-author">
+                                    <h4>Jordan Kimmons</h4>
+                                    <p>Founder, JK Media</p>
+                                </div>
+                            </div>
+                            <p class="testimonial-quote"><span class="text-white">Working with Josh was a breeze</span>. He built a clean Shopify site and set me up with a custom email and everything. Smooth process, clear communication, and easy-to-edit pages.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- CTA Section -->
+            <section class="section-border py-40 flex-center fade-up">
+                <div class="container text-center">
+                    <p class="hero-subtitle mb-4 accent-color">Ready to build something exceptional?</p>
+                    <h2 class="hero-title cta-title font-heading">Let's craft your vision together.</h2>
+                    <div class="hero-buttons center mt-8">
+                        <a href="#" class="btn btn-primary" id="bottomCTA">
+                            <svg style="color: #0c0c0c;" viewBox="0 0 16 16" width="20" height="20"><path fill="currentColor" d="M8.364 5.346a1.62 1.62 0 0 1 2.293.004c.632.632.637 1.659.004 2.293a1.62 1.62 0 0 1-2.293-.004 1.62 1.62 0 0 1-.004-2.293m1.585.71a.62.62 0 0 0-.878-.003.62.62 0 0 0 .004.878.62.62 0 0 0 .878.004.62.62 0 0 0-.004-.878M13.778 3.5a1.95 1.95 0 0 0-1.272-1.272A4.84 4.84 0 0 0 7.63 3.422l-.629.63a2.38 2.38 0 0 0-2.62.502l-.786.785a.5.5 0 0 0 0 .708l.85.85a1.5 1.5 0 0 0 .39 1.441l.167.167-.773.462a.5.5 0 0 0-.097.783l2.123 2.123a.5.5 0 0 0 .783-.097l.462-.772.167.166c.39.391.943.521 1.442.39l.85.85a.5.5 0 0 0 .707 0l.785-.785a2.38 2.38 0 0 0 .503-2.62l.629-.63A4.84 4.84 0 0 0 13.778 3.5m-1.572-.318a.95.95 0 0 1 .618.619 3.84 3.84 0 0 1-.947 3.867l-2.795 2.795a.5.5 0 0 1-.707 0L5.543 7.631a.5.5 0 0 1 0-.707L8.338 4.13a3.84 3.84 0 0 1 3.868-.947m-1.064 6.635c.037.393-.095.8-.397 1.101l-.432.432-.352-.352zM5.088 5.261a1.37 1.37 0 0 1 1.101-.397l-1.18 1.18-.353-.351zm1.684 5.014-.262.437-1.216-1.216.438-.262zm-1.923 1.59a.5.5 0 1 0-.707-.708l-1.32 1.32a.5.5 0 1 0 .707.708zm-1.062-1.769a.5.5 0 0 1 0 .707l-.53.53a.5.5 0 1 1-.706-.708l.53-.529a.5.5 0 0 1 .706 0m2.123 2.83a.5.5 0 1 0-.707-.707l-.53.53a.5.5 0 1 0 .708.707z"></path></svg>
+                            <span style="color: #0c0c0c;">Book a Free Consult</span>
+                        </a>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <div class="container footer-content fade-up" style="border: none;">
+                <a href="#" class="logo-link lg">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 938 1200" fill="none"><path fill="#fff" d="M378.601 20.668C391.746-1.578 415.915-7.32 428.115 10.62c18.179 34.922 61.139 122.277 87.547 192.314.956 4.306 5.883 13.061 17.939 13.635 15.07.717 116.25 20.092 177.963 103.333 61.713 83.24 29.421 74.629 154.281 137.059 11.003 4.306 30.713 18.945 21.528 43.056-11.481 30.139-38.032 74.63-151.411 74.63S514.226 553.12 406.587 648.56C298.949 744 288.185 962.147 394.388 1066.2c106.204 104.05 234.652 77.5 322.916 40.9 88.264-36.6 172.222-127.73 203.078-180.832 1.914-3.588 7.32-10.333 13.635-8.611 2.153.718 5.597 5.023 2.152 16.505-4.305 14.352-30.856 100.458-109.073 162.178-51.922 40.96-160.023 113.2-332.245 102.61-81.469-5.01-240.266-35.4-360.231-162.89-194.468-206.667-153.232-466.393-33.727-630.046C213.555 251.732 287.01 175.667 378.601 20.668Zm25.115 61.711c-26.072 40.186-88.407 133.904-129.166 187.292-50.949 66.736-94.005 105.487-152.13 201.644-58.124 96.157-107.638 243.981-27.268 416.203C159.448 1025.3 305.646 1099.45 370.707 1119.3c-44.49-42.34-104.05-119.12-104.05-251.875 0-132.754 53.818-216.713 124.86-279.143 71.042-62.431 215.278-83.24 307.13-70.323 73.481 10.333 112.422-8.612 122.708-19.375-143.518-74.63-104.051-92.57-160.74-152.848-56.69-60.278-121.274-72.477-144.954-76.065-23.681-3.588-36.598-7.893-45.926-33.008-7.463-20.093-47.122-111.228-66.019-154.284Z"></path><path fill="#fff" d="M662.452 659.429c2.537-8.017 13.881-8.017 16.419 0l41.68 131.686a8.612 8.612 0 0 0 5.611 5.611l131.686 41.68c8.017 2.537 8.017 13.882 0 16.419l-131.686 41.68a8.612 8.612 0 0 0-5.611 5.611l-41.68 131.684c-2.537 8.02-13.882 8.02-16.419 0l-41.68-131.684a8.613 8.613 0 0 0-5.612-5.611l-131.685-41.68c-8.017-2.537-8.017-13.882 0-16.419l131.685-41.68a8.613 8.613 0 0 0 5.612-5.611l41.68-131.686Z"></path></svg>
+                    <span>Aether Fox Studio</span>
+                </a>
+                <a href="mailto:hello@aetherfox.studio" class="footer-email">hello@aetherfox.studio</a>
+                
+                <div class="social-links">
+                    <a href="#" class="btn btn-icon btn-sm"><svg viewBox="0 0 256 256" width="20" height="20"><path fill="currentColor" d="M212.62 75.17A63.7 63.7 0 0 0 206.39 26 12 12 0 0 0 196 20a63.71 63.71 0 0 0-50 24h-20a63.71 63.71 0 0 0-50-24 12 12 0 0 0-10.39 6 63.7 63.7 0 0 0-6.23 49.17A61.5 61.5 0 0 0 52 104v8a60.1 60.1 0 0 0 45.76 58.28A43.66 43.66 0 0 0 92 192v4H76a20 20 0 0 1-20-20 44.05 44.05 0 0 0-44-44 12 12 0 0 0 0 24 20 20 0 0 1 20 20 44.05 44.05 0 0 0 44 44h16v12a12 12 0 0 0 24 0v-40a20 20 0 0 1 40 0v40a12 12 0 0 0 24 0v-40a43.66 43.66 0 0 0-5.76-21.72A60.1 60.1 0 0 0 220 112v-8a61.5 61.5 0 0 0-7.38-28.83M196 112a36 36 0 0 1-36 36h-48a36 36 0 0 1-36-36v-8a37.87 37.87 0 0 1 6.13-20.12 11.65 11.65 0 0 0 1.58-11.49 39.9 39.9 0 0 1-.4-27.72 39.87 39.87 0 0 1 26.41 17.8 12 12 0 0 0 10.1 5.53h32.35a12 12 0 0 0 10.11-5.53 39.84 39.84 0 0 1 26.41-17.8 39.9 39.9 0 0 1-.4 27.72 12 12 0 0 0 1.61 11.53A37.85 37.85 0 0 1 196 104Z"></path></svg></a>
+                    <a href="#" class="btn btn-icon btn-sm"><svg viewBox="0 0 256 256" width="20" height="20"><path fill="currentColor" d="m218.12 209.56-61-95.8 59.72-65.69a12 12 0 0 0-17.76-16.14l-55.27 60.84-37.69-59.21A12 12 0 0 0 96 28H48a12 12 0 0 0-10.12 18.44l61 95.8-59.76 65.69a12 12 0 1 0 17.76 16.14l55.31-60.84 37.69 59.21A12 12 0 0 0 160 228h48a12 12 0 0 0 10.12-18.44M166.59 204 69.86 52h19.55l96.73 152Z"></path></svg></a>
+                </div>
+
+                <div class="footer-links">
+                    <p>© 2026 Aether Fox Studio. All rights reserved.</p>
+                    <span class="divider">|</span>
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script src="main.js"></script>
+</body>
+</html>

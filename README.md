@@ -42,7 +42,7 @@ TrafficControl/
 
 1. Clone repository
 
-git clone https://github.com/rexxyydv/AI_Traffic_Control_System.git
+git clone https://github.com/karanajitsahoo/AI_Traffic_Control_System.git
 cd TrafficControl
 
 2. Install dependencies
@@ -135,3 +135,6 @@ Karanajit Sahoo
 
 
 
+
+
+sourav.girifcs@kiit.ac.in
